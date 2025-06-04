@@ -1,4 +1,5 @@
 use serde::Serialize;
+use serde_json::Value;
 use service_utils_rs::services::db::get_db;
 use surrealdb::Uuid;
 
@@ -71,14 +72,17 @@ pub async fn default_with_owner(owner: &str, name: &str, description: &str) -> R
 
 pub async fn update_graph_by_id(id: &str, nodes: Vec<Node>, edges: Vec<Edge>) -> Result<()> {
     let query = r#"
-        UPDATE graph SET nodes = $nodes, edges = $edges WHERE id = $id;
+        UPDATE graph SET nodes = $nodes, edges = $edges WHERE uuid = $id;
     "#;
+
+    let nodes_value: Value = serde_json::to_value(nodes)?.into();
+    let edges_value: Value = serde_json::to_value(edges)?.into();
 
     let db = get_db();
     db.query(query)
         .bind(("id", id.to_owned()))
-        .bind(("nodes", nodes))
-        .bind(("edges", edges))
+        .bind(("nodes", nodes_value))
+        .bind(("edges", edges_value))
         .await?;
 
     Ok(())

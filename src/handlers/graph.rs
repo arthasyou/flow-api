@@ -13,7 +13,7 @@ use crate::{
     error::error_code,
     models::{
         Graph,
-        graph::{CreateGraphRequest, GraphSummary},
+        graph::{CreateGraphRequest, GraphSummary, UpdateGraphRequest},
     },
 };
 
@@ -162,7 +162,7 @@ pub async fn delete_graph(
 #[utoipa::path(
     put,
     path = "/update/{id}",
-    request_body = Graph,
+    request_body = UpdateGraphRequest,
     responses(
         (status = 200, description = "Succeed", body = CommonResponse<Empty>),
         (status = 404, description = "Graph not found", body = CommonError),
@@ -175,7 +175,7 @@ pub async fn delete_graph(
 pub async fn update_graph(
     Extension(UserId(user_id)): Extension<UserId>,
     axum::extract::Path(id): axum::extract::Path<String>,
-    Json(payload): Json<Graph>,
+    Json(payload): Json<UpdateGraphRequest>,
 ) -> ResponseResult<Empty> {
     // First, fetch the graph and check ownership
     let graph = get_graph_by_id(&id).await.map_err(|e| {

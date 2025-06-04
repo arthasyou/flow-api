@@ -13,6 +13,9 @@ pub enum Error {
     #[error("db error: {0}")]
     DbError(#[from] surrealdb::Error),
 
+    #[error("serde error: {0}")]
+    SerdeError(#[from] serde_json::Error),
+
     #[error("{message:} ({line:}, {column})")]
     CustomError {
         message: String,

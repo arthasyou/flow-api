@@ -34,6 +34,6 @@ pub struct GraphSummary {
 
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct UpdateGraphRequest {
-    pub nodes: Option<Vec<Node>>,
-    pub edges: Option<Vec<Edge>>,
+    pub nodes: Vec<Node>,
+    pub edges: Vec<Edge>,
 }
