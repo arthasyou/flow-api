@@ -10,6 +10,9 @@ pub enum Error {
     #[error("config error: {0}")]
     ServiceError(#[from] service_utils_rs::error::Error),
 
+    #[error("db error: {0}")]
+    DbError(#[from] surrealdb::Error),
+
     #[error("{message:} ({line:}, {column})")]
     CustomError {
         message: String,

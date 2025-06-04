@@ -1,11 +1,16 @@
 use serde::Deserialize;
-use service_utils_rs::utils::load_settings;
+use service_utils_rs::{
+    services::{db::SurrealdbCfg, jwt::JwtCfg},
+    utils::load_settings,
+};
 
 use crate::error::Result;
 
 #[derive(Debug, Deserialize)]
 pub struct Settings {
     pub http: HttpCfg,
+    pub surrealdb: SurrealdbCfg,
+    pub jwt: JwtCfg,
 }
 
 #[derive(Debug, Deserialize)]
