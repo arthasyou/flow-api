@@ -57,11 +57,11 @@ impl GraphInput {
     }
 }
 
-pub async fn create_graph(input: GraphInput) -> Result<()> {
-    let db = get_db();
-    let _r: Option<Graph> = db.create(("graph", &input.uuid)).content(input).await?;
-    Ok(())
-}
+// pub async fn create_graph(input: GraphInput) -> Result<()> {
+//     let db = get_db();
+//     let _r: Option<Graph> = db.create(("graph", &input.uuid)).content(input).await?;
+//     Ok(())
+// }
 
 pub async fn default_with_owner(owner: &str, name: &str, description: &str) -> Result<()> {
     let db = get_db();
