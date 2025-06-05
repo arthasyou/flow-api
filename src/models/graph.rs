@@ -32,6 +32,27 @@ pub struct GraphSummary {
     pub description: String,
 }
 
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct GraphDetail {
+    pub uuid: String,
+    pub name: String,
+    pub description: String,
+    pub nodes: Vec<Node>,
+    pub edges: Vec<Edge>,
+}
+
+impl From<Graph> for GraphDetail {
+    fn from(graph: Graph) -> Self {
+        GraphDetail {
+            uuid: graph.uuid,
+            name: graph.name,
+            description: graph.description,
+            nodes: graph.nodes,
+            edges: graph.edges,
+        }
+    }
+}
+
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct UpdateGraphRequest {
     pub nodes: Vec<Node>,

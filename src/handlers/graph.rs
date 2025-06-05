@@ -11,10 +11,7 @@ use crate::{
         update_graph_by_id,
     },
     error::error_code,
-    models::{
-        Graph,
-        graph::{CreateGraphRequest, GraphSummary, UpdateGraphRequest},
-    },
+    models::graph::{CreateGraphRequest, GraphDetail, GraphSummary, UpdateGraphRequest},
 };
 
 #[utoipa::path(
@@ -85,7 +82,7 @@ pub async fn get_graphs(
     get,
     path = "/get/{id}",
     responses(
-        (status = 200, description = "Succeed", body = CommonResponse<Graph>),
+        (status = 200, description = "Succeed", body = CommonResponse<GraphDetail>),
         (status = 404, description = "Graph not found", body = CommonError),
         (status = 500, description = "Error", body = CommonError)
     ),
@@ -96,7 +93,7 @@ pub async fn get_graphs(
 pub async fn get_graph(
     Extension(UserId(user_id)): Extension<UserId>,
     axum::extract::Path(id): axum::extract::Path<String>,
-) -> ResponseResult<Graph> {
+) -> ResponseResult<GraphDetail> {
     let graph = get_graph_by_id(&id).await.map_err(|e| {
         println!("Error getting graph by id: {:?}", e);
         (
@@ -106,7 +103,10 @@ pub async fn get_graph(
     })?;
 
     match graph {
-        Some(g) if g.owner == user_id => Ok(g.into_common_response().to_json()),
+        Some(g) if g.owner == user_id => {
+            let g: GraphDetail = g.into();
+            Ok(g.into_common_response().to_json())
+        }
         _ => Err((
             StatusCode::NOT_FOUND,
             Json(error_code::GRAPH_NOT_FOUND.into()),
