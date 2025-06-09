@@ -177,6 +177,7 @@ pub async fn update_graph(
     axum::extract::Path(id): axum::extract::Path<String>,
     Json(payload): Json<UpdateGraphRequest>,
 ) -> ResponseResult<Empty> {
+    println!("Updating graph payload: {:#?}", &payload);
     // First, fetch the graph and check ownership
     let graph = get_graph_by_id(&id).await.map_err(|e| {
         println!("Error getting graph by id for update: {:?}", e);

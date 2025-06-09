@@ -105,6 +105,21 @@ pub async fn get_graphs_by_owner(owner: &str) -> Result<Vec<GraphSummary>> {
     Ok(r)
 }
 
+pub async fn get_owner_graph_by_id(id: &str, owner: &str) -> Result<Option<Graph>> {
+    let query = r#"
+        SELECT * FROM graph WHERE uuid = $id AND owner = $owner;
+    "#;
+
+    let db = get_db();
+    let mut response = db
+        .query(query)
+        .bind(("id", id.to_owned()))
+        .bind(("owner", owner.to_owned()))
+        .await?;
+    let r = response.take(0)?;
+    Ok(r)
+}
+
 pub async fn delete_graph_by_id(id: &str) -> Result<()> {
     let db = get_db();
     let _: Option<Graph> = db.delete(("graph", id.to_owned())).await?;

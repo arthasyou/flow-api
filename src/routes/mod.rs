@@ -1,4 +1,5 @@
 mod graph;
+mod workflow;
 
 use std::sync::Arc;
 
@@ -14,10 +15,13 @@ use utoipa::{
 };
 use utoipa_swagger_ui::SwaggerUi;
 
+use crate::routes::workflow::WorkflowApi;
+
 #[derive(OpenApi)]
 #[openapi(
         nest(
-            (path = "/graph", api = GraphApi)
+            (path = "/graph", api = GraphApi),
+            (path = "/workflow", api = WorkflowApi)
         ),
     )]
 struct ApiDoc;
@@ -39,6 +43,7 @@ pub fn create_routes(jwt: Arc<Jwt>) -> Router {
 
     Router::new()
         .nest("/graph", graph_routes())
+        .nest("/workflow", workflow::workflow_routes())
         .route_layer(from_fn(auth))
         .layer(Extension(jwt))
         .layer(cors)

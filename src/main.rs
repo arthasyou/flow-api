@@ -5,6 +5,7 @@ mod logging;
 mod models;
 mod routes;
 mod settings;
+mod utils;
 
 use std::sync::Arc;
 
