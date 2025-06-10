@@ -1,5 +1,11 @@
-pub fn front_to_back<T>(vec: Vec<T>) -> Vec<T> {
-    let mut result = vec;
-    result.reverse();
-    result
+use workflow_rs::model::node::{ControlNode, DataNode, NodeType};
+
+pub(crate) fn get_workflow_node_type(t: &str) -> workflow_rs::model::node::NodeType {
+    match t {
+        "input" => NodeType::Data(DataNode::Input),
+        "prompt" => NodeType::Data(DataNode::Prompt),
+        "identity" => NodeType::Data(DataNode::Identity),
+        "control" => NodeType::Control(ControlNode::Branch),
+        _ => NodeType::Data(DataNode::Identity),
+    }
 }

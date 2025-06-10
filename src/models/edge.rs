@@ -7,3 +7,13 @@ pub struct Edge {
     pub source: String,
     pub target: String,
 }
+
+impl From<Edge> for workflow_rs::model::graph_data::EdgeData {
+    fn from(edge: Edge) -> Self {
+        workflow_rs::model::graph_data::EdgeData {
+            id: edge.id,
+            start: edge.source,
+            end: edge.target,
+        }
+    }
+}

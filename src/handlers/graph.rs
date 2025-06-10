@@ -11,7 +11,9 @@ use crate::{
         update_graph_by_id,
     },
     error::error_code,
-    models::graph::{CreateGraphRequest, GraphDetail, GraphSummary, UpdateGraphRequest},
+    models::graph::{
+        CreateGraphRequest, CreateGraphResponse, GraphDetail, GraphSummary, UpdateGraphRequest,
+    },
 };
 
 #[utoipa::path(
@@ -19,7 +21,7 @@ use crate::{
     path = "/create",
     request_body = CreateGraphRequest,
     responses(
-        (status = 200, description = "Succeed", body = CommonResponse<Empty>),
+        (status = 200, description = "Succeed", body = CommonResponse<CreateGraphResponse>),
         (status = 500, description = "Error", body = CommonError)
     ),
     description = "创建图表",
@@ -29,7 +31,7 @@ use crate::{
 pub async fn create_graph(
     Extension(UserId(user_id)): Extension<UserId>,
     Json(payload): Json<CreateGraphRequest>,
-) -> ResponseResult<Empty> {
+) -> ResponseResult<CreateGraphResponse> {
     // Validate the payload
     if payload.name.trim().is_empty() {
         return Err((
@@ -38,7 +40,7 @@ pub async fn create_graph(
         ));
     }
 
-    default_with_owner(&user_id, &payload.name, &payload.description)
+    let graph_id = default_with_owner(&user_id, &payload.name, &payload.description)
         .await
         .map_err(|e| {
             println!("Error creating graph: {:?}", e);
@@ -48,8 +50,9 @@ pub async fn create_graph(
             )
         })?;
 
-    let res = CommonOk::default().to_json();
-
+    let res = CreateGraphResponse { id: graph_id }
+        .into_common_response()
+        .to_json();
     Ok(res)
 }
 

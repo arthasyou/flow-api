@@ -15,6 +15,9 @@ pub enum Error {
 
     #[error("serde error: {0}")]
     SerdeError(#[from] serde_json::Error),
+
+    #[error("failed to create graph")]
+    GraphCreationError,
 }
 
 pub type Result<T, E = Error> = core::result::Result<T, E>;
