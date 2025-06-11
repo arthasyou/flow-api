@@ -5,7 +5,7 @@ pub(crate) fn get_workflow_node_type(t: &str) -> workflow_rs::model::node::NodeT
         "input" => NodeType::Data(DataNode::Input),
         "prompt" => NodeType::Data(DataNode::Prompt),
         "identity" => NodeType::Data(DataNode::Identity),
-        "control" => NodeType::Control(ControlNode::Branch),
+        "branch" => NodeType::Control(ControlNode::Branch),
         _ => NodeType::Data(DataNode::Identity),
     }
 }
