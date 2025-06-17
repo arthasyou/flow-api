@@ -4,11 +4,7 @@ use service_utils_rs::services::http::{
     middleware::auth_mw::UserId,
     response::{Empty, ResponseResult},
 };
-use workflow_rs::{
-    Workflow,
-    graph::Graph,
-    model::{DataPayload, data_payload::SingleData},
-};
+use workflow_rs::{Workflow, graph::Graph};
 
 use crate::{
     database::graph::get_owner_graph_by_id,
@@ -61,14 +57,17 @@ pub async fn run_workflow(
     })?;
     println!("Graph execution result: {:?}", r);
 
-    if let DataPayload::Single(SingleData::Text(r1)) = r {
-        let r1 = WorkflowOutput { output: r1 };
-        let res = r1.into_common_response().to_json();
-        return Ok(res);
-    }
+    let r1 = r.as_text().map_err(|e| {
+        println!("Error converting workflow result to output: {:?}", e);
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(error_code::SERVER_ERROR.into()),
+        )
+    })?;
 
-    Err((
-        StatusCode::INTERNAL_SERVER_ERROR,
-        Json(error_code::SERVER_ERROR.into()),
-    ))
+    let r1 = WorkflowOutput {
+        output: r1.to_string(),
+    };
+    let res = r1.into_common_response().to_json();
+    Ok(res)
 }
