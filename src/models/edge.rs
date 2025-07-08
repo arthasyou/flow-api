@@ -6,6 +6,7 @@ pub struct Edge {
     pub id: String,
     pub source: String,
     pub target: String,
+    pub handle: String,
 }
 
 impl From<Edge> for workflow_rs::model::graph_data::EdgeData {
