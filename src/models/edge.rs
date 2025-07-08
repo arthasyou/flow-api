@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
-#[serde(rename_all = "camelCase")]
 pub struct MarkerEnd {
+    #[serde(rename = "type")]
     pub arrow_type: String,
     pub color: String,
 }
