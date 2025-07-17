@@ -47,11 +47,12 @@ pub async fn run_workflow(
     let graph = Graph::from(graph_data);
     // println!("Graph: {:#?}", graph);
 
-    let r = Workflow::start(graph).await.map_err(|_e| {
-        (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(error_code::SERVER_ERROR.into()),
-        )
+    let r = Workflow::start(graph).await.map_err(|e| {
+        let error = CommonError {
+            code: -1,
+            message: e.to_string(),
+        };
+        (StatusCode::INTERNAL_SERVER_ERROR, Json(error))
     })?;
     // println!("Graph execution result: {:?}", r);
 
