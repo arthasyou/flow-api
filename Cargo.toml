@@ -22,4 +22,4 @@ utoipa = { version = "5", features = ["axum_extras"] }
 utoipa-swagger-ui = { version = "9", features = ["axum"] }
 utoipa-axum = { version = "0.2" }
 service_utils_rs = { version = "0.3.14", features = ["jwt", "http", "db"] }
-workflow-rs = { git = "https://github.com/arthasyou/workflow-rs.git", branch = "main" }
+workflow-rs = { path = "../workflow-rs" }

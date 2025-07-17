@@ -49,7 +49,7 @@ impl GraphInput {
     pub fn default_with_owner(owner: &str, name: &str, description: &str) -> Self {
         let start_node = Node::new_start_node();
         let end_node = Node::new_end_node();
-        println!("end_node: {:?}", end_node);
+
         let nodes = vec![start_node, end_node];
         GraphInput {
             uuid: Uuid::new_v4().to_string(),
@@ -63,23 +63,23 @@ impl GraphInput {
         }
     }
 
-    pub fn demo(owner: &str, name: &str, description: &str) -> Self {
-        let start_node = Node::new_start_node();
-        let end_node = Node::new_end_node();
+    // pub fn demo(owner: &str, name: &str, description: &str) -> Self {
+    //     let start_node = Node::new_start_node();
+    //     let end_node = Node::new_end_node();
 
-        let nodes = vec![start_node, end_node];
+    //     let nodes = vec![start_node, end_node];
 
-        GraphInput {
-            uuid: Uuid::new_v4().to_string(),
-            owner: "demo".to_string(),
-            name: "Demo Graph".to_string(),
-            description: "This is a demo graph".to_string(),
-            nodes,
-            edges: Vec::new(),
-            start_node: "start".to_string(),
-            end_node: "end".to_string(),
-        }
-    }
+    //     GraphInput {
+    //         uuid: Uuid::new_v4().to_string(),
+    //         owner: "demo".to_string(),
+    //         name: "Demo Graph".to_string(),
+    //         description: "This is a demo graph".to_string(),
+    //         nodes,
+    //         edges: Vec::new(),
+    //         start_node: "start".to_string(),
+    //         end_node: "end".to_string(),
+    //     }
+    // }
 }
 
 // pub async fn create_graph(input: GraphInput) -> Result<()> {

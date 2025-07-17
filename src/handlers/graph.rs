@@ -43,7 +43,6 @@ pub async fn create_graph(
     let graph_id = default_with_owner(&user_id, &payload.name, &payload.description)
         .await
         .map_err(|e| {
-            println!("Error creating graph: {:?}", e);
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(error_code::SERVER_ERROR.into()),
@@ -71,7 +70,6 @@ pub async fn get_graphs(
     Extension(UserId(user_id)): Extension<UserId>,
 ) -> ResponseResult<Vec<GraphSummary>> {
     let graphs = get_graphs_by_owner(&user_id).await.map_err(|e| {
-        println!("Error getting graphs: {:?}", e);
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(error_code::SERVER_ERROR.into()),
@@ -98,7 +96,6 @@ pub async fn get_graph(
     axum::extract::Path(id): axum::extract::Path<String>,
 ) -> ResponseResult<GraphDetail> {
     let graph = get_graph_by_id(&id).await.map_err(|e| {
-        println!("Error getting graph by id: {:?}", e);
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(error_code::SERVER_ERROR.into()),
@@ -134,7 +131,6 @@ pub async fn delete_graph(
     axum::extract::Path(id): axum::extract::Path<String>,
 ) -> ResponseResult<Empty> {
     let graph = get_graph_by_id(&id).await.map_err(|e| {
-        println!("Error getting graph by id for deletion: {:?}", e);
         (
             StatusCode::NOT_FOUND,
             Json(error_code::GRAPH_NOT_FOUND.into()),
@@ -146,7 +142,6 @@ pub async fn delete_graph(
             // Call the database function to delete the graph
             // Assuming a function `delete_graph_by_id` exists
             delete_graph_by_id(&id).await.map_err(|e| {
-                println!("Error deleting graph: {:?}", e);
                 (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     Json(error_code::SERVER_ERROR.into()),
@@ -180,10 +175,8 @@ pub async fn update_graph(
     axum::extract::Path(id): axum::extract::Path<String>,
     Json(payload): Json<UpdateGraphRequest>,
 ) -> ResponseResult<Empty> {
-    println!("Updating graph payload: {:#?}", &payload);
     // First, fetch the graph and check ownership
     let graph = get_graph_by_id(&id).await.map_err(|e| {
-        println!("Error getting graph by id for update: {:?}", e);
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(error_code::SERVER_ERROR.into()),
@@ -195,7 +188,6 @@ pub async fn update_graph(
             update_graph_by_id(&id, payload.nodes, payload.edges)
                 .await
                 .map_err(|e| {
-                    println!("Error updating graph: {:?}", e);
                     (
                         StatusCode::INTERNAL_SERVER_ERROR,
                         Json(error_code::SERVER_ERROR.into()),

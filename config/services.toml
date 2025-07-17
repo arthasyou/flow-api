@@ -2,7 +2,7 @@
 port = 19877
 
 [surrealdb]
-host = "localhost"
+host = "192.168.1.233"
 port = 8000
 username = "root"
 password = "root"

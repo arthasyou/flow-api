@@ -42,11 +42,11 @@ impl Node {
             description: None,
             payload: json!({
                 "input": {
-                    "data": {
-                            "type": "Text",
-                            "value": "A"
-                        },
-                        "kind": "Single"
+                    "type": "Single",
+                    "value": {
+                        "type": "Text",
+                        "value": ""
+                    }
                 }
             }),
         };

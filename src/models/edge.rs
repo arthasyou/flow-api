@@ -27,8 +27,10 @@ impl From<Edge> for workflow_rs::model::graph_data::EdgeData {
     fn from(edge: Edge) -> Self {
         workflow_rs::model::graph_data::EdgeData {
             id: edge.id,
-            start: edge.source,
-            end: edge.target,
+            source: edge.source,
+            target: edge.target,
+            source_handle: edge.source_handle,
+            target_handle: edge.target_handle,
         }
     }
 }
