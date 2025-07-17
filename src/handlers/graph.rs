@@ -42,7 +42,7 @@ pub async fn create_graph(
 
     let graph_id = default_with_owner(&user_id, &payload.name, &payload.description)
         .await
-        .map_err(|e| {
+        .map_err(|_e| {
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(error_code::SERVER_ERROR.into()),
@@ -69,7 +69,7 @@ pub async fn create_graph(
 pub async fn get_graphs(
     Extension(UserId(user_id)): Extension<UserId>,
 ) -> ResponseResult<Vec<GraphSummary>> {
-    let graphs = get_graphs_by_owner(&user_id).await.map_err(|e| {
+    let graphs = get_graphs_by_owner(&user_id).await.map_err(|_e| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(error_code::SERVER_ERROR.into()),
@@ -95,7 +95,7 @@ pub async fn get_graph(
     Extension(UserId(user_id)): Extension<UserId>,
     axum::extract::Path(id): axum::extract::Path<String>,
 ) -> ResponseResult<GraphDetail> {
-    let graph = get_graph_by_id(&id).await.map_err(|e| {
+    let graph = get_graph_by_id(&id).await.map_err(|_e| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(error_code::SERVER_ERROR.into()),
@@ -130,7 +130,7 @@ pub async fn delete_graph(
     Extension(UserId(user_id)): Extension<UserId>,
     axum::extract::Path(id): axum::extract::Path<String>,
 ) -> ResponseResult<Empty> {
-    let graph = get_graph_by_id(&id).await.map_err(|e| {
+    let graph = get_graph_by_id(&id).await.map_err(|_e| {
         (
             StatusCode::NOT_FOUND,
             Json(error_code::GRAPH_NOT_FOUND.into()),
@@ -141,7 +141,7 @@ pub async fn delete_graph(
         Some(g) if g.owner == user_id => {
             // Call the database function to delete the graph
             // Assuming a function `delete_graph_by_id` exists
-            delete_graph_by_id(&id).await.map_err(|e| {
+            delete_graph_by_id(&id).await.map_err(|_e| {
                 (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     Json(error_code::SERVER_ERROR.into()),
@@ -176,7 +176,7 @@ pub async fn update_graph(
     Json(payload): Json<UpdateGraphRequest>,
 ) -> ResponseResult<Empty> {
     // First, fetch the graph and check ownership
-    let graph = get_graph_by_id(&id).await.map_err(|e| {
+    let graph = get_graph_by_id(&id).await.map_err(|_e| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(error_code::SERVER_ERROR.into()),
@@ -187,7 +187,7 @@ pub async fn update_graph(
         Some(g) if g.owner == user_id => {
             update_graph_by_id(&id, payload.nodes, payload.edges)
                 .await
-                .map_err(|e| {
+                .map_err(|_e| {
                     (
                         StatusCode::INTERNAL_SERVER_ERROR,
                         Json(error_code::SERVER_ERROR.into()),

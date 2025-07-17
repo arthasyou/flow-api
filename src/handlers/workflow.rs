@@ -31,7 +31,7 @@ pub async fn run_workflow(
 ) -> ResponseResult<WorkflowOutput> {
     let graph_db = get_owner_graph_by_id(&payload.id, &user_id)
         .await
-        .map_err(|e| {
+        .map_err(|_e| {
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(error_code::SERVER_ERROR.into()),
@@ -47,7 +47,7 @@ pub async fn run_workflow(
     let graph = Graph::from(graph_data);
     // println!("Graph: {:#?}", graph);
 
-    let r = Workflow::start(graph).await.map_err(|e| {
+    let r = Workflow::start(graph).await.map_err(|_e| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(error_code::SERVER_ERROR.into()),
@@ -55,7 +55,7 @@ pub async fn run_workflow(
     })?;
     // println!("Graph execution result: {:?}", r);
 
-    let r1 = r.as_text().map_err(|e| {
+    let r1 = r.as_text().map_err(|_e| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(error_code::SERVER_ERROR.into()),
